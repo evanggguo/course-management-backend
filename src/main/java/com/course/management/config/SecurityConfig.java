@@ -5,6 +5,7 @@ import com.course.management.entity.User;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -29,6 +30,7 @@ import java.util.Collections;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Lazy
     @Autowired
     private JwtAuthenticationFilter jwtAuthFilter;
 
