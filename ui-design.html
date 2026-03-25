@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>课程管理系统 - UI 设计稿</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f0f2f5; color: #333; }
+
+  /* ===== 设计规范 ===== */
+  :root {
+    --primary: #4F6CF7;
+    --primary-light: #EEF1FF;
+    --success: #52c41a;
+    --warning: #faad14;
+    --danger: #ff4d4f;
+    --text-primary: #1a1a1a;
+    --text-secondary: #666;
+    --text-placeholder: #bbb;
+    --border: #e8e8e8;
+    --bg-page: #f0f2f5;
+    --bg-card: #ffffff;
+    --sidebar-width: 220px;
+    --header-height: 64px;
+    --radius: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  /* ===== 通用组件 ===== */
+  .screen-title { font-size: 28px; font-weight: 700; color: #1a1a1a; text-align: center; padding: 40px 0 8px; }
+  .screen-sub { text-align: center; color: #888; margin-bottom: 40px; font-size: 14px; }
+  .section { max-width: 1400px; margin: 0 auto 60px; padding: 0 40px; }
+  .section-label { font-size: 18px; font-weight: 600; color: #333; margin-bottom: 20px; padding-left: 12px; border-left: 4px solid var(--primary); }
+
+  /* 设计规范区 */
+  .spec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .spec-card { background: #fff; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+  .spec-card h3 { font-size: 14px; color: #888; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* 颜色色板 */
+  .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .color-swatch { width: 48px; height: 48px; border-radius: 8px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-size: 10px; color: #fff; font-weight: 600; }
+
+  /* 按钮组件 */
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; }
+  .btn-primary { background: var(--primary); color: #fff; }
+  .btn-default { background: #fff; color: #333; border: 1px solid var(--border); }
+  .btn-danger { background: #fff; color: var(--danger); border: 1px solid var(--danger); }
+  .btn-sm { padding: 4px 12px; font-size: 12px; }
+  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* 标签 */
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .tag-success { background: #f6ffed; color: var(--success); border: 1px solid #b7eb8f; }
+  .tag-default { background: #fafafa; color: #999; border: 1px solid #d9d9d9; }
+  .tag-warning { background: #fffbe6; color: var(--warning); border: 1px solid #ffe58f; }
+  .tag-danger { background: #fff2f0; color: var(--danger); border: 1px solid #ffccc7; }
+  .tag-blue { background: var(--primary-light); color: var(--primary); border: 1px solid #c3cefb; }
+
+  /* ===== 模拟屏幕容器 ===== */
+  .mockup-wrapper { display: flex; justify-content: center; }
+  .browser-frame { width: 100%; max-width: 1100px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 40px rgba(0,0,0,0.15); border: 1px solid #ddd; }
+  .browser-bar { background: #f5f5f5; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #ddd; }
+  .browser-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .browser-url { flex: 1; background: #fff; border-radius: 20px; padding: 4px 16px; font-size: 12px; color: #888; border: 1px solid #ddd; margin: 0 12px; }
+
+  /* ===== 登录/注册页 ===== */
+  .auth-page { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 480px; display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .auth-card { background: #fff; border-radius: 16px; padding: 40px; width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .auth-logo { text-align: center; margin-bottom: 8px; }
+  .auth-logo-icon { width: 56px; height: 56px; background: var(--primary); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; }
+  .auth-title { text-align: center; font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .auth-subtitle { text-align: center; font-size: 13px; color: #999; margin-bottom: 28px; }
+  .form-item { margin-bottom: 16px; }
+  .form-label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; font-weight: 500; }
+  .form-input { width: 100%; padding: 10px 14px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; color: #333; background: #fafafa; }
+  .form-input:focus { outline: none; border-color: var(--primary); background: #fff; }
+  .form-input.active { border-color: var(--primary); background: #fff; }
+  .role-select { display: flex; gap: 12px; }
+  .role-option { flex: 1; border: 2px solid #e0e0e0; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; }
+  .role-option.selected { border-color: var(--primary); background: var(--primary-light); }
+  .role-option .role-icon { font-size: 24px; margin-bottom: 4px; }
+  .role-option .role-name { font-size: 13px; font-weight: 600; color: #333; }
+  .auth-btn { width: 100%; padding: 12px; background: var(--primary); color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  .auth-link { text-align: center; margin-top: 16px; font-size: 13px; color: #999; }
+  .auth-link a { color: var(--primary); text-decoration: none; font-weight: 500; }
+
+  /* ===== 主布局 ===== */
+  .app-layout { display: flex; height: 520px; background: var(--bg-page); }
+
+  /* 侧边栏 */
+  .sidebar { width: var(--sidebar-width); background: #fff; border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+  .sidebar-logo { height: var(--header-height); display: flex; align-items: center; gap: 10px; padding: 0 20px; border-bottom: 1px solid var(--border); }
+  .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .logo-text { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .sidebar-menu { padding: 12px 0; flex: 1; }
+  .menu-item { display: flex; align-items: center; gap: 10px; padding: 11px 20px; font-size: 14px; color: var(--text-secondary); cursor: pointer; border-radius: 0; transition: all 0.15s; margin: 2px 8px; border-radius: 6px; }
+  .menu-item:hover { background: #f5f5f5; color: #333; }
+  .menu-item.active { background: var(--primary-light); color: var(--primary); font-weight: 600; }
+  .menu-item .menu-icon { width: 18px; text-align: center; font-size: 16px; }
+  .sidebar-user { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .user-info { flex: 1; min-width: 0; }
+  .user-name { font-size: 13px; font-weight: 600; color: #333; }
+  .user-role { font-size: 11px; color: #999; }
+
+  /* 主内容区 */
+  .main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+  .page-header { height: var(--header-height); background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+  .page-title { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+  .page-actions { display: flex; align-items: center; gap: 12px; }
+  .content-body { flex: 1; padding: 20px 24px; overflow: auto; }
+
+  /* 卡片 */
+  .card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); }
+
+  /* 统计卡片 */
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+  .stat-card { background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .stat-label { font-size: 12px; color: #999; margin-bottom: 8px; }
+  .stat-value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+  .stat-value.blue { color: var(--primary); }
+  .stat-value.green { color: var(--success); }
+  .stat-value.orange { color: var(--warning); }
+
+  /* 表格 */
+  .table-wrap { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: #fafafa; }
+  th { padding: 12px 16px; text-align: left; font-size: 13px; font-weight: 600; color: #888; border-bottom: 1px solid var(--border); }
+  td { padding: 12px 16px; font-size: 13px; color: #333; border-bottom: 1px solid #f5f5f5; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafefe; }
+
+  /* 课程卡片网格 */
+  .course-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .course-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+  .course-card-header { height: 80px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+  .course-card-body { padding: 16px; }
+  .course-card-title { font-size: 15px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+  .course-card-desc { font-size: 12px; color: #999; margin-bottom: 12px; line-height: 1.5; }
+  .course-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 12px; border-top: 1px solid #f5f5f5; }
+  .price { font-size: 16px; font-weight: 700; color: #ff6b35; }
+  .price span { font-size: 12px; font-weight: 400; color: #999; }
+
+  /* 进度条 */
+  .progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; }
+
+  /* Modal */
+  .modal-overlay { position: relative; }
+  .modal { background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); width: 480px; }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-size: 16px; font-weight: 700; color: #1a1a1a; }
+  .modal-close { color: #bbb; font-size: 18px; cursor: pointer; }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+  /* 课时余额卡片 */
+  .hours-card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 12px; }
+  .hours-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .hours-card-title { font-size: 15px; font-weight: 700; }
+  .hours-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+  .hours-stat { text-align: center; }
+  .hours-stat-val { font-size: 22px; font-weight: 700; }
+  .hours-stat-label { font-size: 11px; color: #999; margin-top: 2px; }
+
+  /* 分隔线 */
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* 响应式标注 */
+  .note { background: #fffbe6; border: 1px solid #ffe58f; border-radius: 6px; padding: 12px 16px; font-size: 13px; color: #7a5200; margin-top: 12px; }
+  .note strong { color: #d46b08; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .font-demo { margin-bottom: 8px; }
+</style>
+</head>
+<body>
+
+<!-- 顶部标题 -->
+<div style="background: linear-gradient(135deg, #4F6CF7, #764ba2); padding: 48px 40px; text-align: center; color: #fff;">
+  <div style="font-size: 13px; opacity: 0.7; margin-bottom: 8px; letter-spacing: 2px;">UI DESIGN SPECIFICATION</div>
+  <div style="font-size: 36px; font-weight: 800; margin-bottom: 8px;">课程管理系统</div>
+  <div style="font-size: 16px; opacity: 0.8;">交互界面设计规范 · v1.0 · 2026-03-25</div>
+</div>
+
+<!-- ==================== 设计规范 ==================== -->
+<br>
+<div class="section">
+  <div class="section-label">01 · 设计规范</div>
+  <div class="spec-grid">
+
+    <!-- 色彩 -->
+    <div class="spec-card">
+      <h3>色彩体系</h3>
+      <div class="color-row">
+        <div class="color-swatch" style="background:#4F6CF7;width:72px;height:72px;font-size:11px;border-radius:12px;">Primary<br>#4F6CF7</div>
+        <div class="color-swatch" style="background:#EEF1FF;color:#4F6CF7;width:64px;height:64px;">Light<br>#EEF1FF</div>
+        <div class="color-swatch" style="background:#52c41a;width:48px;height:48px;font-size:10px;">成功</div>
+        <div class="color-swatch" style="background:#faad14;width:48px;height:48px;font-size:10px;">警告</div>
+        <div class="color-swatch" style="background:#ff4d4f;width:48px;height:48px;font-size:10px;">危险</div>
+        <div class="color-swatch" style="background:#1a1a1a;width:48px;height:48px;font-size:10px;">文字</div>
+        <div class="color-swatch" style="background:#f0f2f5;color:#999;width:48px;height:48px;font-size:10px;border:1px solid #eee;">背景</div>
+      </div>
+    </div>
+
+    <!-- 字体 -->
+    <div class="spec-card">
+      <h3>字体规范</h3>
+      <div class="font-demo" style="font-size:28px;font-weight:700;color:#1a1a1a;">页面标题 28px/700</div>
+      <div class="font-demo" style="font-size:20px;font-weight:700;color:#1a1a1a;">区块标题 20px/700</div>
+      <div class="font-demo" style="font-size:16px;font-weight:600;color:#333;">卡片标题 16px/600</div>
+      <div class="font-demo" style="font-size:14px;color:#333;">正文内容 14px/400</div>
+      <div class="font-demo" style="font-size:12px;color:#888;">辅助说明 12px/400</div>
+    </div>
+
+    <!-- 间距 -->
+    <div class="spec-card">
+      <h3>组件状态标签</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="tag tag-success">启用 ACTIVE</span>
+        <span class="tag tag-default">停用 INACTIVE</span>
+        <span class="tag tag-blue">可预约 AVAILABLE</span>
+        <span class="tag tag-warning">已预约 BOOKED</span>
+        <span class="tag tag-success">已完成 COMPLETED</span>
+        <span class="tag tag-danger">已取消 CANCELLED</span>
+        <span class="tag tag-blue">已确认 CONFIRMED</span>
+      </div>
+      <h3 style="margin-top:16px;">按钮规范</h3>
+      <div class="btn-group">
+        <button class="btn btn-primary">新增课程</button>
+        <button class="btn btn-default">编辑</button>
+        <button class="btn btn-danger btn-sm">删除</button>
+        <button class="btn btn-primary btn-sm">预约</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 登录页 ==================== -->
+<div class="section">
+  <div class="section-label">02 · 登录页</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/login</div>
+      </div>
+      <div class="auth-page">
+        <div class="auth-card">
+          <div class="auth-logo">
+            <div class="auth-logo-icon">📚</div>
+          </div>
+          <div class="auth-title">欢迎回来</div>
+          <div class="auth-subtitle">课程管理系统</div>
+          <div class="form-item">
+            <label class="form-label">用户名</label>
+            <input class="form-input active" value="郭爱文" readonly>
+          </div>
+          <div class="form-item">
+            <label class="form-label">密码</label>
+            <input class="form-input" type="password" value="••••••••" readonly>
+          </div>
+          <button class="auth-btn">登 录</button>
+          <div class="auth-link">还没有账号？<a href="#">立即注册</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 注册页 ==================== -->
+<div class="section">
+  <div class="section-label">03 · 注册页</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/register</div>
+      </div>
+      <div class="auth-page">
+        <div class="auth-card" style="width:420px;">
+          <div class="auth-logo">
+            <div class="auth-logo-icon">✨</div>
+          </div>
+          <div class="auth-title">创建账号</div>
+          <div class="auth-subtitle">加入课程管理系统</div>
+          <div class="form-item">
+            <label class="form-label">用户名 *</label>
+            <input class="form-input" placeholder="请输入用户名" readonly>
+          </div>
+          <div class="form-item">
+            <label class="form-label">密码 *</label>
+            <input class="form-input" type="password" placeholder="请输入密码" readonly>
+          </div>
+          <div class="form-item">
+            <label class="form-label">选择角色 *</label>
+            <div class="role-select">
+              <div class="role-option selected">
+                <div class="role-icon">👩‍🏫</div>
+                <div class="role-name">教师</div>
+              </div>
+              <div class="role-option">
+                <div class="role-icon">🧑‍🎓</div>
+                <div class="role-name">学生</div>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div class="form-item" style="margin-bottom:0">
+              <label class="form-label">真实姓名</label>
+              <input class="form-input" placeholder="选填" readonly>
+            </div>
+            <div class="form-item" style="margin-bottom:0">
+              <label class="form-label">邮箱</label>
+              <input class="form-input" placeholder="选填" readonly>
+            </div>
+          </div>
+          <button class="auth-btn" style="margin-top:20px;">注 册</button>
+          <div class="auth-link">已有账号？<a href="#">立即登录</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 教师-课程管理 ==================== -->
+<div class="section">
+  <div class="section-label">04 · 教师端 · 课程管理</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/teacher/courses</div>
+      </div>
+      <div class="app-layout">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+          <div class="sidebar-logo">
+            <div class="logo-icon">📚</div>
+            <div class="logo-text">课程管理</div>
+          </div>
+          <div class="sidebar-menu">
+            <div class="menu-item active"><span class="menu-icon">📖</span>我的课程</div>
+            <div class="menu-item"><span class="menu-icon">📅</span>课程安排</div>
+            <div class="menu-item"><span class="menu-icon">👥</span>学生管理</div>
+          </div>
+          <div class="sidebar-user">
+            <div class="user-avatar">郭</div>
+            <div class="user-info">
+              <div class="user-name">郭爱文</div>
+              <div class="user-role">教师</div>
+            </div>
+          </div>
+        </div>
+        <!-- 主内容 -->
+        <div class="main-content">
+          <div class="page-header">
+            <div class="page-title">我的课程</div>
+            <div class="page-actions">
+              <button class="btn btn-primary">＋ 新增课程</button>
+            </div>
+          </div>
+          <div class="content-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>课程名称</th>
+                    <th>描述</th>
+                    <th>单价（元/课时）</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>初级英语口语</strong></td>
+                    <td style="color:#999;max-width:180px">适合零基础学员，从日常对话开始</td>
+                    <td style="color:#ff6b35;font-weight:600;">¥ 150</td>
+                    <td><span class="tag tag-success">启用</span></td>
+                    <td style="color:#999;font-size:12px;">2026-03-20</td>
+                    <td><div class="btn-group"><button class="btn btn-default btn-sm">编辑</button><button class="btn btn-danger btn-sm">删除</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>高级数学辅导</strong></td>
+                    <td style="color:#999;max-width:180px">针对高考数学，强化题型训练</td>
+                    <td style="color:#ff6b35;font-weight:600;">¥ 200</td>
+                    <td><span class="tag tag-success">启用</span></td>
+                    <td style="color:#999;font-size:12px;">2026-03-22</td>
+                    <td><div class="btn-group"><button class="btn btn-default btn-sm">编辑</button><button class="btn btn-danger btn-sm">删除</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>钢琴基础课</strong></td>
+                    <td style="color:#999;max-width:180px">五线谱入门及基本演奏技巧</td>
+                    <td style="color:#ff6b35;font-weight:600;">¥ 300</td>
+                    <td><span class="tag tag-default">停用</span></td>
+                    <td style="color:#999;font-size:12px;">2026-03-23</td>
+                    <td><div class="btn-group"><button class="btn btn-default btn-sm">编辑</button><button class="btn btn-danger btn-sm">删除</button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 新增课程 Modal ==================== -->
+<div class="section">
+  <div class="section-label">05 · 教师端 · 新增课程 Modal</div>
+  <div style="display:flex;justify-content:center;">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">新增课程</span>
+        <span class="modal-close">✕</span>
+      </div>
+      <div class="modal-body">
+        <div class="form-item">
+          <label class="form-label">课程名称 *</label>
+          <input class="form-input active" value="初级英语口语" readonly>
+        </div>
+        <div class="form-item">
+          <label class="form-label">课程描述</label>
+          <textarea class="form-input" style="height:80px;resize:none;font-family:inherit" readonly>适合零基础学员，从日常对话开始，循序渐进提升口语能力。</textarea>
+        </div>
+        <div class="form-item">
+          <label class="form-label">每课时单价（元）*</label>
+          <input class="form-input" value="150" readonly>
+        </div>
+        <div class="form-item">
+          <label class="form-label">课程状态</label>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:44px;height:24px;background:var(--primary);border-radius:12px;position:relative;"><div style="position:absolute;right:2px;top:2px;width:20px;height:20px;background:#fff;border-radius:50%;"></div></div>
+            <span style="font-size:13px;color:#333;">已启用</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default">取消</button>
+        <button class="btn btn-primary">确认创建</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 教师-课程安排 ==================== -->
+<div class="section">
+  <div class="section-label">06 · 教师端 · 课程安排</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/teacher/schedules</div>
+      </div>
+      <div class="app-layout">
+        <div class="sidebar">
+          <div class="sidebar-logo"><div class="logo-icon">📚</div><div class="logo-text">课程管理</div></div>
+          <div class="sidebar-menu">
+            <div class="menu-item"><span class="menu-icon">📖</span>我的课程</div>
+            <div class="menu-item active"><span class="menu-icon">📅</span>课程安排</div>
+            <div class="menu-item"><span class="menu-icon">👥</span>学生管理</div>
+          </div>
+          <div class="sidebar-user"><div class="user-avatar">郭</div><div class="user-info"><div class="user-name">郭爱文</div><div class="user-role">教师</div></div></div>
+        </div>
+        <div class="main-content">
+          <div class="page-header">
+            <div class="page-title">课程安排</div>
+            <button class="btn btn-primary">＋ 新增排课</button>
+          </div>
+          <div class="content-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>课程</th><th>开始时间</th><th>结束时间</th><th>时长</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>初级英语口语</strong></td>
+                    <td>2026-03-28 09:00</td>
+                    <td>2026-03-28 10:00</td>
+                    <td>60 分钟</td>
+                    <td><span class="tag tag-blue">可预约</span></td>
+                    <td><div class="btn-group"><button class="btn btn-default btn-sm">编辑</button><button class="btn btn-danger btn-sm">删除</button></div></td>
+                  </tr>
+                  <tr>
+                    <td><strong>高级数学辅导</strong></td>
+                    <td>2026-03-29 14:00</td>
+                    <td>2026-03-29 16:00</td>
+                    <td>120 分钟</td>
+                    <td><span class="tag tag-warning">已预约</span></td>
+                    <td><span style="font-size:12px;color:#ccc;">不可编辑</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>初级英语口语</strong></td>
+                    <td>2026-03-25 10:00</td>
+                    <td>2026-03-25 11:00</td>
+                    <td>60 分钟</td>
+                    <td><span class="tag tag-success">已完成</span></td>
+                    <td><span style="font-size:12px;color:#ccc;">不可编辑</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 学生-浏览课程 ==================== -->
+<div class="section">
+  <div class="section-label">07 · 学生端 · 浏览课程</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/student/courses</div>
+      </div>
+      <div class="app-layout">
+        <div class="sidebar">
+          <div class="sidebar-logo"><div class="logo-icon">📚</div><div class="logo-text">课程管理</div></div>
+          <div class="sidebar-menu">
+            <div class="menu-item active"><span class="menu-icon">🔍</span>浏览课程</div>
+            <div class="menu-item"><span class="menu-icon">⏱</span>我的课时</div>
+            <div class="menu-item"><span class="menu-icon">📆</span>课程预约</div>
+            <div class="menu-item"><span class="menu-icon">📋</span>我的预约</div>
+          </div>
+          <div class="sidebar-user"><div class="user-avatar" style="background:#52c41a;">李</div><div class="user-info"><div class="user-name">李小明</div><div class="user-role">学生</div></div></div>
+        </div>
+        <div class="main-content">
+          <div class="page-header">
+            <div class="page-title">浏览课程</div>
+          </div>
+          <div class="content-body">
+            <div class="course-grid">
+              <div class="course-card">
+                <div class="course-card-header" style="background:linear-gradient(135deg,#667eea,#764ba2);">🗣</div>
+                <div class="course-card-body">
+                  <div class="course-card-title">初级英语口语</div>
+                  <div class="course-card-desc">适合零基础学员，从日常对话开始，循序渐进提升口语能力。</div>
+                  <div style="font-size:12px;color:#999;margin-bottom:10px;">授课教师：郭爱文</div>
+                  <div class="course-card-footer">
+                    <div class="price">¥150<span>/课时</span></div>
+                    <button class="btn btn-primary btn-sm">购买课时</button>
+                  </div>
+                </div>
+              </div>
+              <div class="course-card">
+                <div class="course-card-header" style="background:linear-gradient(135deg,#f093fb,#f5576c);">📐</div>
+                <div class="course-card-body">
+                  <div class="course-card-title">高级数学辅导</div>
+                  <div class="course-card-desc">针对高考数学，强化题型训练，提升解题速度与准确率。</div>
+                  <div style="font-size:12px;color:#999;margin-bottom:10px;">授课教师：郭爱文</div>
+                  <div class="course-card-footer">
+                    <div class="price">¥200<span>/课时</span></div>
+                    <button class="btn btn-primary btn-sm">购买课时</button>
+                  </div>
+                </div>
+              </div>
+              <div class="course-card">
+                <div class="course-card-header" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">🎹</div>
+                <div class="course-card-body">
+                  <div class="course-card-title">钢琴基础课</div>
+                  <div class="course-card-desc">五线谱入门及基本演奏技巧，从零开始学习钢琴。</div>
+                  <div style="font-size:12px;color:#999;margin-bottom:10px;">授课教师：郭爱文</div>
+                  <div class="course-card-footer">
+                    <div class="price">¥300<span>/课时</span></div>
+                    <button class="btn btn-primary btn-sm">购买课时</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 购买课时 Modal ==================== -->
+<div class="section">
+  <div class="section-label">08 · 学生端 · 购买课时 Modal</div>
+  <div style="display:flex;justify-content:center;">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">购买课时</span>
+        <span class="modal-close">✕</span>
+      </div>
+      <div class="modal-body">
+        <div style="background:var(--primary-light);border-radius:8px;padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+          <div style="font-size:28px;">🗣</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:#1a1a1a;">初级英语口语</div>
+            <div style="font-size:13px;color:#888;margin-top:2px;">授课教师：郭爱文 · ¥150 / 课时</div>
+          </div>
+        </div>
+        <div class="form-item">
+          <label class="form-label">购买课时数 *</label>
+          <input class="form-input active" value="10" readonly>
+        </div>
+        <div style="background:#f9f9f9;border-radius:8px;padding:16px;display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-size:14px;color:#666;">应付金额</span>
+          <span style="font-size:24px;font-weight:700;color:#ff6b35;">¥ 1,500</span>
+        </div>
+        <div style="font-size:12px;color:#999;margin-top:8px;">10 课时 × ¥150/课时 = ¥1,500</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default">取消</button>
+        <button class="btn btn-primary">确认购买</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 学生-我的课时 ==================== -->
+<div class="section">
+  <div class="section-label">09 · 学生端 · 我的课时</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/student/hours</div>
+      </div>
+      <div class="app-layout">
+        <div class="sidebar">
+          <div class="sidebar-logo"><div class="logo-icon">📚</div><div class="logo-text">课程管理</div></div>
+          <div class="sidebar-menu">
+            <div class="menu-item"><span class="menu-icon">🔍</span>浏览课程</div>
+            <div class="menu-item active"><span class="menu-icon">⏱</span>我的课时</div>
+            <div class="menu-item"><span class="menu-icon">📆</span>课程预约</div>
+            <div class="menu-item"><span class="menu-icon">📋</span>我的预约</div>
+          </div>
+          <div class="sidebar-user"><div class="user-avatar" style="background:#52c41a;">李</div><div class="user-info"><div class="user-name">李小明</div><div class="user-role">学生</div></div></div>
+        </div>
+        <div class="main-content">
+          <div class="page-header"><div class="page-title">我的课时</div></div>
+          <div class="content-body">
+            <div class="stat-grid">
+              <div class="stat-card"><div class="stat-label">总购买课时</div><div class="stat-value blue">20</div></div>
+              <div class="stat-card"><div class="stat-label">已使用课时</div><div class="stat-value orange">5</div></div>
+              <div class="stat-card"><div class="stat-label">剩余课时</div><div class="stat-value green">15</div></div>
+            </div>
+            <div class="hours-card">
+              <div class="hours-card-header">
+                <span class="hours-card-title">🗣 初级英语口语</span>
+                <span class="tag tag-success">启用中</span>
+              </div>
+              <div class="hours-stats">
+                <div class="hours-stat"><div class="hours-stat-val blue">10</div><div class="hours-stat-label">总课时</div></div>
+                <div class="hours-stat"><div class="hours-stat-val orange">3</div><div class="hours-stat-label">已使用</div></div>
+                <div class="hours-stat"><div class="hours-stat-val green">7</div><div class="hours-stat-label">剩余</div></div>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
+              <div style="font-size:11px;color:#999;margin-top:4px;">已使用 30%</div>
+            </div>
+            <div class="hours-card">
+              <div class="hours-card-header">
+                <span class="hours-card-title">📐 高级数学辅导</span>
+                <span class="tag tag-success">启用中</span>
+              </div>
+              <div class="hours-stats">
+                <div class="hours-stat"><div class="hours-stat-val blue">10</div><div class="hours-stat-label">总课时</div></div>
+                <div class="hours-stat"><div class="hours-stat-val orange">2</div><div class="hours-stat-label">已使用</div></div>
+                <div class="hours-stat"><div class="hours-stat-val green">8</div><div class="hours-stat-label">剩余</div></div>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:20%;background:#52c41a"></div></div>
+              <div style="font-size:11px;color:#999;margin-top:4px;">已使用 20%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 学生-我的预约 ==================== -->
+<div class="section">
+  <div class="section-label">10 · 学生端 · 我的预约</div>
+  <div class="mockup-wrapper">
+    <div class="browser-frame">
+      <div class="browser-bar">
+        <div class="browser-dot" style="background:#ff5f57"></div>
+        <div class="browser-dot" style="background:#febc2e"></div>
+        <div class="browser-dot" style="background:#28c840"></div>
+        <div class="browser-url">http://34.173.18.26/student/bookings</div>
+      </div>
+      <div class="app-layout">
+        <div class="sidebar">
+          <div class="sidebar-logo"><div class="logo-icon">📚</div><div class="logo-text">课程管理</div></div>
+          <div class="sidebar-menu">
+            <div class="menu-item"><span class="menu-icon">🔍</span>浏览课程</div>
+            <div class="menu-item"><span class="menu-icon">⏱</span>我的课时</div>
+            <div class="menu-item"><span class="menu-icon">📆</span>课程预约</div>
+            <div class="menu-item active"><span class="menu-icon">📋</span>我的预约</div>
+          </div>
+          <div class="sidebar-user"><div class="user-avatar" style="background:#52c41a;">李</div><div class="user-info"><div class="user-name">李小明</div><div class="user-role">学生</div></div></div>
+        </div>
+        <div class="main-content">
+          <div class="page-header"><div class="page-title">我的预约</div></div>
+          <div class="content-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>课程</th><th>上课时间</th><th>时长</th><th>授课教师</th><th>状态</th><th>操作</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>高级数学辅导</strong></td>
+                    <td>2026-03-29 14:00</td>
+                    <td>120 分钟</td>
+                    <td>郭爱文</td>
+                    <td><span class="tag tag-blue">已确认</span></td>
+                    <td><button class="btn btn-danger btn-sm">取消预约</button></td>
+                  </tr>
+                  <tr>
+                    <td><strong>初级英语口语</strong></td>
+                    <td>2026-03-25 10:00</td>
+                    <td>60 分钟</td>
+                    <td>郭爱文</td>
+                    <td><span class="tag tag-success">已完成</span></td>
+                    <td><span style="font-size:12px;color:#ccc;">—</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong>初级英语口语</strong></td>
+                    <td>2026-03-22 09:00</td>
+                    <td>60 分钟</td>
+                    <td>郭爱文</td>
+                    <td><span class="tag tag-danger">已取消</span></td>
+                    <td><span style="font-size:12px;color:#ccc;">—</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 底部 -->
+<div style="background:#1a1a1a;color:#666;text-align:center;padding:24px;font-size:13px;margin-top:40px;">
+  课程管理系统 · UI 设计规范 v1.0 · 2026-03-25 · 使用 HTML/CSS 绘制，GitHub 可直接预览
+</div>
+
+</body>
+</html>
